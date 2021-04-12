@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.ReportMapper">
+
+
+	<sql id="bpmsFlightDate">
+		<if test="granularity==1">TO_CHAR(FLIGHT_DATE,'yyyy') time</if>
+		<if test="granularity==2">TO_CHAR(FLIGHT_DATE,'yyyy年MM月') time</if>
+		<if test="granularity==3">TO_CHAR(FLIGHT_DATE,'EEE, d MMM yyyy HH:mm:ss z') time</if>
+		<if test="granularity==4">TO_CHAR(FLIGHT_DATE,'yyyy年MM月dd日  HH:mm') time</if>
+		<if test="granularity==0">TO_CHAR(FLIGHT_DATE,'yyyy-MM-dd') time</if>
+	</sql>
+
+	<insert id="addBpms" parameterType="com.entity.Bpms">
+		upsert  into bpms (id,company_code,depart_terminal,arrived_terminal,baggage_type,flight_date,create_time)
+		values(#{id},#{companyCode},#{departTerminal},#{arrivedTerminal},#{baggageType},#{flightDate},now())
+	</insert>
+
+	<select id="selectAll" resultType="java.lang.Object">
+		select * from "bpms" limit 1
+	</select>
+
+	<select id="countByCompany" resultType="com.entity.BaggageLineData" parameterType="com.entity.QueryParam">
+		select count(1) count,company_code type,
+	   <include refid="bpmsFlightDate" />
+	    from bpms
+		where flight_date between #{beginTime} and #{endTime}
+		group by  type , time
+	</select>
+
+
+</mapper>
