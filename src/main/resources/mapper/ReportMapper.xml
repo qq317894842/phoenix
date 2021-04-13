@@ -16,9 +16,6 @@
 		values(#{id},#{companyCode},#{departTerminal},#{arrivedTerminal},#{baggageType},#{flightDate},now())
 	</insert>
 
-	<select id="selectAll" resultType="java.lang.Object">
-		select * from "bpms" limit 1
-	</select>
 
 	<select id="countByCompany" resultType="com.entity.BaggageLineData" parameterType="com.entity.QueryParam">
 		select count(1) count,company_code type,

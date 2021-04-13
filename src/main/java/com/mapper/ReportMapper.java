@@ -9,7 +9,6 @@ import java.util.List;
 
 @Mapper
 public interface ReportMapper {
-    public List<Object> selectAll();
 
     public int addBpms(Bpms bpms);
 
